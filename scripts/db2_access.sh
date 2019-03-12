@@ -42,6 +42,7 @@ has_del=""
 find_select(){
   echo "...Finding all Select Statements"
   if [ -d $cobol_source_cut ];
+  then
     cd $cobol_source_cut
   else
     echo "The cobol_source_cut directory was not found"
@@ -211,7 +212,7 @@ echo "${1}:${2}:${has_sel}:${has_ins}:${has_upd}:${has_del}" >> ${audit_log}
 }
 
 remove_duplicates(){
-(head -n 2 ${audit_log} && tail -n +3 ${audit_log} | sort -u) > $audit_log_Sorted
+(head -n 2 ${audit_log} && tail -n +3 ${audit_log} | sort -u) > $audit_log_sorted
 rm ${audit_log}
 }
 
