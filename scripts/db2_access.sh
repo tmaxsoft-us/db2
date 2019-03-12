@@ -39,7 +39,12 @@ has_del=""
 ################################################################################
 find_select(){
   echo "...Finding all Select Statements"
-  cd $cobol_source_cut
+  if [ -d $cobol_source_cut ];
+    cd $cobol_source_cut
+  else
+    echo "The cobol_source_cut directory was not found"
+    exit 10
+  fi
   #For all the files in the cobol_source_cut directory
   for item in `ls`
   do
