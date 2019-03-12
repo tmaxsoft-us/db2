@@ -10,6 +10,7 @@
 #             The output is a text file that includes 1 row per access         #
 #             It includes, the COBOL file name, the table name, and type of    #
 #             access                                                           #
+#REQUIREMENTS: Change work_dir variable in the VARIABLES section               #
 #AUTHOR: Matthew Koziel                                                        #
 #DATE: 2019/03/11                                                              #
 #USAGE: sh db2_access.sh                                                       #
@@ -19,10 +20,11 @@
 #                                VARIABLES                                     #
 #DESCRIPTION: Setting variables for this script                                #
 ################################################################################
-cobol_source="/home/oframe/YSW/DB2_Access_Script/source"
-cobol_source_cut="/home/oframe/YSW/DB2_Access_Script/inserts"
-audit_log="/home/oframe/YSW/DB2_Access_Script/Audit.log"
-audit_log_sorted="${Audit_Log}.sorted"
+work_dir="/home/oframe/YSW/db2_access_script"
+cobol_source="${work_dir}/source"
+cobol_source_cut="${work_dir}/inserts"
+audit_log="${work_dir}/audit.log"
+audit_log_sorted="${audit_log}.sorted"
 regexp="INSERT[\s\d\t\n\v]*INTO[\s]*\w*"
 has_ins=""
 has_upd=""
@@ -192,25 +194,25 @@ echo "Removed all leading line numbers..."
 
 
 init_audit_file(){
-echo "...Removing Audit Log"
-rm ${Audit_Log}.sorted
-echo "Audit Log Removed..."
-echo "Creating new Audit Log..."
-touch ${Audit_Log}
-echo "Program:Table/View:SELECT:INSERT:UPDATE:DELETE" > ${Audit_Log}
-echo "... New Audit Log Created"
+echo "...Removing audit Log"
+rm ${audit_log}.sorted
+echo "audit Log Removed..."
+echo "Creating new audit Log..."
+touch ${audit_log}
+echo "Program:Table/View:SELECT:INSERT:UPDATE:DELETE" > ${audit_log}
+echo "... New audit Log Created"
 }
 
 print_audit(){
 
 #$1 is the Program Name
 #$2 is the Table/View Name
-echo "${1}:${2}:${has_sel}:${has_ins}:${has_upd}:${has_del}" >> ${Audit_Log}
+echo "${1}:${2}:${has_sel}:${has_ins}:${has_upd}:${has_del}" >> ${audit_log}
 }
 
 remove_duplicates(){
-(head -n 2 ${Audit_Log} && tail -n +3 ${Audit_Log} | sort -u) > $Audit_Log_Sorted
-rm ${Audit_Log}
+(head -n 2 ${audit_log} && tail -n +3 ${audit_log} | sort -u) > $audit_log_Sorted
+rm ${audit_log}
 }
 
 #MAIN#
